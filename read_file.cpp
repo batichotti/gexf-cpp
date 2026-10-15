@@ -40,7 +40,7 @@ void parse_edges(const pugi::xml_node& graph_node, Graph& g) {
     }
 }
 
-// Unifica os processos anteriores
+// Lê um arquivo .gexf
 std::optional<Graph> read_gexf(const char* path) {
     pugi::xml_document doc;
     if (!load_file(path, doc)) return std::nullopt;
@@ -80,11 +80,3 @@ void print_graph(const Graph& g) {
     }
 }
 
-int main() {
-    auto g = read_gexf("LesMiserables.gexf");
-    if (!g) return 1;
-
-    print_graph(*g);
-
-    return 0;
-}
