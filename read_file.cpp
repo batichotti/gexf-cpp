@@ -1,64 +1,81 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <optional>
 #include "pugixml.hpp"
+#include "graph.hpp"
 
-struct Node {
-    std::string id;
-    std::string label;
-};
-
-struct Edge {
-    std::string id;
-    std::string source;
-    std::string target;
-};
-
-int main() {
-    pugi::xml_document doc;
+// Importa o arquivo .gexf e verifica sua integridade
+bool load_file(const char* path, pugi::xml_document& doc){
+    pugi::xml_parse_result result = doc.load_file(path);
     
-    pugi::xml_parse_result result = doc.load_file("LesMiserables.gexf");
+    // result verifica se a importação foi bem-sucedida
     if (!result) {
         std::cerr << "Erro ao abrir o arquivo GEXF: " << result.description() << std::endl;
-        return 1;
+        return false;
     }
 
-    pugi::xml_node graph_node = doc.child("gexf").child("graph");
-    
+    return true;
+}
+
+// Localiza a tag <graph> dentro do documento
+pugi::xml_node find_graph_node(const pugi::xml_document& doc) {
+    return doc.child("gexf").child("graph");
+}
+
+// Lê os <node> e adiciona ao grafo
+void parse_nodes(const pugi::xml_node& graph_node, Graph& g) {
+    for (pugi::xml_node node : graph_node.child("nodes").children("node")) {
+        g.add_node(Node(node.attribute("id").as_string(),
+                        node.attribute("label").as_string()));
+    }
+}
+
+// Lê os <edge> e adiciona ao grafo
+void parse_edges(const pugi::xml_node& graph_node, Graph& g) {
+    for (pugi::xml_node edge : graph_node.child("edges").children("edge")) {
+        g.add_edge(Edge(edge.attribute("id").as_string(),
+                        edge.attribute("source").as_string(),
+                        edge.attribute("target").as_string()));
+    }
+}
+
+// Unifica os processos anteriores
+std::optional<Graph> read_gexf(const char* path) {
+    pugi::xml_document doc;
+    if (!load_file(path, doc)) return std::nullopt;
+
+    pugi::xml_node graph_node = find_graph_node(doc);
     if (!graph_node) {
-        std::cerr << "Estrutura GEXF inválida (falta a tag <graph>)." << std::endl;
-        return 1;
+        std::cerr << "Estrutura gexf inválida (falta a tag <graph>)." << std::endl;
+        return std::nullopt;
     }
 
-    std::vector<Node> nodes;
-    std::vector<Edge> edges;
+    Graph g;
+    parse_nodes(graph_node, g);
+    parse_edges(graph_node, g);
+    return g;
+}
 
-    pugi::xml_node nodes_container = graph_node.child("nodes");
-    for (pugi::xml_node node : nodes_container.children("node")) {
-        Node n;
-        n.id = node.attribute("id").as_string();
-        n.label = node.attribute("label").as_string();
-        nodes.push_back(n);
-    }
-
-    pugi::xml_node edges_container = graph_node.child("edges");
-    for (pugi::xml_node edge : edges_container.children("edge")) {
-        Edge e;
-        e.id = edge.attribute("id").as_string();
-        e.source = edge.attribute("source").as_string();
-        e.target = edge.attribute("target").as_string();
-        edges.push_back(e);
-    }
-
+// Exibe informações
+void print_graph(const Graph& g) {
+    const auto& nodes = g.nodes();
+    const auto& edges = g.edges();
+    
     std::cout << "--- NÓS ENCONTRADOS (" << nodes.size() << ") ---\n";
-    for (const auto& n : nodes) {
-        std::cout << "ID: " << n.id << " | Label: " << n.label << "\n";
-    }
+    for (const auto& n : nodes)
+        std::cout << "ID: " << n.id() << " | Label: " << n.label() << "\n";
 
     std::cout << "\n--- ARESTAS ENCONTRADAS (" << edges.size() << ") ---\n";
-    for (const auto& e : edges) {
-        std::cout << "Edge ID: " << e.id << " (" << e.source << " -> " << e.target << ")\n";
-    }
+    for (const auto& e : edges)
+        std::cout << "Edge ID: " << e.id() << " (" << e.source() << " -> " << e.target() << ")\n";
+}
+
+int main() {
+    auto g = read_gexf("LesMiserables.gexf");
+    if (!g) return 1;
+
+    print_graph(*g);
 
     return 0;
 }
