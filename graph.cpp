@@ -12,6 +12,7 @@ class Graph {
         const std::vector<Node>& nodes() const { return nodes_; }
         const std::vector<Edge>& edges() const { return edges_; }
         const std::unordered_map<std::string, std::unordered_set<std::string>>& adj() const { return adj_; }
+        const std::unordered_set<std::string>& neighbours(Node n) const { return adj_.at(n.id()); }
 
         void build_adjacency(){
             this->adj_.clear();
