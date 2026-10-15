@@ -62,7 +62,6 @@ std::optional<Graph> read_gexf(const char* path) {
 void print_graph(const Graph& g) {
     const auto& nodes = g.nodes();
     const auto& edges = g.edges();
-    const auto& adj = g.adj();
     
     std::cout << "--- NÓS ENCONTRADOS (" << nodes.size() << ") ---\n";
     for (const auto& n : nodes)
