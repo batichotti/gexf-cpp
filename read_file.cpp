@@ -65,7 +65,7 @@ void print_graph(const Graph& g) {
     
     std::cout << "--- NÓS ENCONTRADOS (" << nodes.size() << ") ---\n";
     for (const auto& n : nodes)
-    std::cout << "ID: " << n.id() << " | Label: " << n.label() << "\n";
+    std::cout << "ID: " << n.second.id() << " | Label: " << n.second.label() << "\n";
     
     std::cout << "\n--- ARESTAS ENCONTRADAS (" << edges.size() << ") ---\n";
     for (const auto& e : edges)
@@ -73,8 +73,8 @@ void print_graph(const Graph& g) {
     
     std::cout << "\n--- MAPA DE ADJACÊNCIAS ---\n";
     for (const auto& n : nodes){
-        std::cout << "ID: " << n.id() << " | Label: " << n.label() << " -> \n";
-        const auto& neighbours = g.neighbours(n);
+        std::cout << "ID: " << n.second.id() << " | Label: " << n.second.label() << " -> \n";
+        const auto& neighbours = g.neighbours(n.second);
         for (const auto& nei : neighbours)
             std::cout << "      ID: " << nei << " -> \n";
     }
