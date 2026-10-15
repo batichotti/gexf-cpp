@@ -3,7 +3,7 @@
 #include <string>
 #include <optional>
 #include "pugixml.hpp"
-#include "graph.hpp"
+#include "graph.cpp"
 
 // Importa o arquivo .gexf e verifica sua integridade
 bool load_file(const char* path, pugi::xml_document& doc){
@@ -54,6 +54,7 @@ std::optional<Graph> read_gexf(const char* path) {
     Graph g;
     parse_nodes(graph_node, g);
     parse_edges(graph_node, g);
+    g.build_adjacency();
     return g;
 }
 
@@ -61,6 +62,7 @@ std::optional<Graph> read_gexf(const char* path) {
 void print_graph(const Graph& g) {
     const auto& nodes = g.nodes();
     const auto& edges = g.edges();
+    const auto& adj = g.adj();
     
     std::cout << "--- NÓS ENCONTRADOS (" << nodes.size() << ") ---\n";
     for (const auto& n : nodes)
@@ -69,6 +71,15 @@ void print_graph(const Graph& g) {
     std::cout << "\n--- ARESTAS ENCONTRADAS (" << edges.size() << ") ---\n";
     for (const auto& e : edges)
         std::cout << "Edge ID: " << e.id() << " (" << e.source() << " -> " << e.target() << ")\n";
+        
+    std::cout << "\n--- MAPA DE ADJACÊNCIAS ---\n";
+    for (const auto& a : adj){
+        std::cout << "ID: " << a.first << " -> \n";
+        for (const auto& b : a.second){
+            std::cout << "      ID: " << b << "\n";
+        }
+    }
+        
 }
 
 int main() {
