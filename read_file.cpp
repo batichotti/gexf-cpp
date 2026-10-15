@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <string>
@@ -75,8 +76,8 @@ void print_graph(const Graph& g) {
     for (const auto& n : nodes){
         std::cout << "ID: " << n.second.id() << " | Label: " << n.second.label() << " -> \n";
         const auto& neighbours = g.neighbours(n.second);
-        for (const auto& nei : neighbours)
-            std::cout << "      ID: " << nei << " -> \n";
+        for (Node nei : neighbours)
+            std::cout << "      ID: " << nei.id() << " -> \n";
     }
 }
 

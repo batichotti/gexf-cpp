@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <unordered_set>
 #include "graph.cpp"
@@ -7,7 +9,7 @@ class DepthFirstSearch {
         const bool marked(Node n) const { return (marked_.find(n) != marked_.end()) ? 1 : 0; }
         const int count() const { return count_; }
     
-        DepthFirstSearch(Graph g, Node n);
+        DepthFirstSearch(const Graph&, Node n);
 
     private:
         std::unordered_set<Node> marked_;

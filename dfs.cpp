@@ -1,6 +1,6 @@
 #include "dfs.hpp"
 
-DepthFirstSearch::DepthFirstSearch(Graph g, Node n){
+DepthFirstSearch::DepthFirstSearch(const Graph& g, Node n){
     marked_.clear();
     count_ = 0;
     dfs(g, n);

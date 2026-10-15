@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
@@ -6,6 +8,8 @@
 
 class Graph {
     public:
+        Graph();
+
         void add_node(Node n) { nodes_.insert({n.id(), n}); }
         void add_edge(Edge e) { edges_.insert(e); }
 
@@ -16,11 +20,13 @@ class Graph {
 
         void build_adjacency(){
             this->adj_.clear();
+            for (const auto& [id, node] : nodes_) adj_.try_emplace(node);
             for (Edge edge : this->edges_) {
-                if (nodes_.find(edge.source()) != nodes_.end())
+                if (nodes_.find(edge.source()) != nodes_.end()){
                     this->adj_[nodes_.at(edge.source())].insert(nodes_.at(edge.target()));
                     this->adj_[nodes_.at(edge.target())].insert(nodes_.at(edge.source()));
-           }
+                }
+            }
         }
 
     private:
