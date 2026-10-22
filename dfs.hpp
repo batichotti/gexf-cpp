@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <unordered_set>
-#include "graph.cpp"
+#include "graph.hpp"
 
 class DepthFirstSearch {
     public:

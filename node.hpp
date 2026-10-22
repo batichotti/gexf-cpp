@@ -5,8 +5,7 @@
 
 class Node {
 public:
-    Node(std::string id, std::string label)
-        : id_(std::move(id)), label_(std::move(label)) {}
+    Node(std::string id, std::string label) : id_(id), label_(label) {}
 
     const std::string& id() const { return id_; }
     const std::string& label() const { return label_; }

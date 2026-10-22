@@ -11,5 +11,5 @@ void DepthFirstSearch::dfs(const Graph& g, Node n) {
     count_++;
 
     for (Node nei : g.neighbours(n))
-    if (marked_.find(nei) == marked_.end()) dfs(g, nei);
+        if (marked_.find(nei) == marked_.end()) dfs(g, nei);
 }

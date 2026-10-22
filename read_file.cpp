@@ -4,7 +4,7 @@
 #include <string>
 #include <optional>
 #include "pugixml.hpp"
-#include "graph.cpp"
+#include "graph.hpp"
 
 // Importa o arquivo .gexf e verifica sua integridade
 bool load_file(const char* path, pugi::xml_document& doc){
