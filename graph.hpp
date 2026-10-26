@@ -8,7 +8,7 @@
 
 class Graph {
     public:
-        Graph();
+        Graph() = default;
 
         void add_node(Node n) { nodes_.insert({n.id(), n}); }
         void add_edge(Edge e) { edges_.insert(e); }

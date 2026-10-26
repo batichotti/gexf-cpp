@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <functional>
 
 class Edge {
     public:
@@ -9,6 +10,17 @@ class Edge {
         const std::string& source() const { return source_; }
         const std::string& target() const { return target_; }
 
+        bool operator==(const Edge& other) const { return id_ == other.id_; }
+
     private:
         std::string id_, source_, target_;
 };
+
+namespace std {
+template <>
+struct hash<Edge> {
+    size_t operator()(const Edge& e) const noexcept {
+        return hash<string>{}(e.id());
+    }
+};
+}

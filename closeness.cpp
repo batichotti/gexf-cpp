@@ -1,20 +1,51 @@
 #include "read_file.cpp"
+#include <iostream>
+#include <queue>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
-int closeness_centrality(Graph graph, Node node, float dist = 0, std::unordered_set<std::string> visited = {}){
-    auto neighbours =  graph.neighbours(node);
+double closeness_centrality(const Graph& graph, const Node& start) {
+    std::queue<const Node*> queue;
+    std::unordered_map<std::string, int> distances;
+
+    queue.push(&start);
+    distances[start.id()] = 0;
+
+    long long total_dist = 0;
+    int reachable = 0;
+
+    while (!queue.empty()) {
+        const Node* current = queue.front();
+        queue.pop();
+        int d = distances[current->id()];
+
+        for (const Node& neighbour : graph.neighbours(*current)) {
+            if (distances.find(neighbour.id()) == distances.end()) {
+                distances[neighbour.id()] = d + 1;
+                total_dist += d + 1;
+                reachable++;
+                queue.push(&neighbour);
+            }
+        }
+    }
+
+    if (total_dist == 0) return 0.0;
+
+    double n = static_cast<double>(graph.nodes().size());
+    return (static_cast<double>(reachable) / total_dist) * (reachable / (n - 1));
 }
 
 int main() {
     auto g = read_gexf("LesMiserables.gexf").value();
 
-    const auto& nodes = g.nodes();
-    const auto& edges = g.edges();
+    std::vector<std::pair<std::string, double>> closeness;
+    for (const auto& [id, node] : g.nodes())
+        closeness.emplace_back(id, closeness_centrality(g, node));
 
-    for (const auto& n : nodes){
-        const auto& neighbours = g.neighbours(n);
-        int closeness = closeness_centrality(g, n);
-    }
+    for (const auto& [id, value] : closeness)
+        std::cout << "Nó: " << id
+                  << " -> Closeness Centrality: " << value << '\n';
 
     return 0;
 }
