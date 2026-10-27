@@ -1,7 +1,6 @@
 #include "read_file.cpp"
 #include "eccentricity.cpp"
 #include "closeness.cpp"
-#include "graph.hpp"
 #include <fstream>
 
 int main() {
