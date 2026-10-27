@@ -14,5 +14,5 @@ sudo apt install libpugixml-dev
 Compile o programa com:
 
 ```bash
-g++ read_file.cpp -o read_file.exe -lpugixml
+make graph
 ```

@@ -1,4 +1,4 @@
-#include "read_file.cpp"
+#include "read_file.hpp"
 #include <iostream>
 #include <queue>
 #include <string>
@@ -36,16 +36,16 @@ double closeness_centrality(const Graph& graph, const Node& start) {
     return (static_cast<double>(reachable) / total_dist) * (reachable / (n - 1));
 }
 
-int main() {
-    auto g = read_gexf("LesMiserables.gexf").value();
+// int main() {
+//     auto g = read_gexf("LesMiserables.gexf").value();
 
-    std::vector<std::pair<std::string, double>> closeness;
-    for (const auto& [id, node] : g.nodes())
-        closeness.emplace_back(id, closeness_centrality(g, node));
+//     std::vector<std::pair<std::string, double>> closeness;
+//     for (const auto& [id, node] : g.nodes())
+//         closeness.emplace_back(id, closeness_centrality(g, node));
 
-    for (const auto& [id, value] : closeness)
-        std::cout << "Nó: " << id
-                  << " -> Closeness Centrality: " << value << '\n';
+//     for (const auto& [id, value] : closeness)
+//         std::cout << "Nó: " << id
+//                   << " -> Closeness Centrality: " << value << '\n';
 
-    return 0;
-}
+//     return 0;
+// }

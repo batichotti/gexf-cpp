@@ -1,13 +1,7 @@
-#pragma once
-#include <iostream>
-#include <vector>
-#include <string>
-#include <optional>
-#include "pugixml.hpp"
-#include "graph.hpp"
+#include "read_file.hpp"
 
 // Importa o arquivo .gexf e verifica sua integridade
-bool load_file(const char* path, pugi::xml_document& doc){
+bool load_file(const char* path, pugi::xml_document& doc) {
     pugi::xml_parse_result result = doc.load_file(path);
     
     // result verifica se a importação foi bem-sucedida
